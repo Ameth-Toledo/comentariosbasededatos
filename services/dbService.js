@@ -1,16 +1,18 @@
-// services/dbService.js
-const mysql = require('mysql');
+const { Client } = require('pg');
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'Ameth2005',
-    database: 'comentarios_imagenes'
+const db = new Client({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: 5432, // El puerto predeterminado de PostgreSQL
 });
 
 db.connect(err => {
     if (err) throw err;
-    console.log('Conectado a la base de datos MySQL');
+    console.log('Conectado a la base de datos PostgreSQL');
 });
 
-module.exports = db;
+module.exports = {
+    query: (text, params) => db.query(text, params),
+};
