@@ -1,18 +1,14 @@
-const { Client } = require('pg');
+const { Pool } = require('pg');
 
-const db = new Client({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: 5432, // El puerto predeterminado de PostgreSQL
+const db = new Pool({
+    host: 'dpg-cruaq25umphs73ekdht0-a.oregon-postgres.render.com', // Host externo proporcionado por Render
+    user: 'comentarios_imagenes_user', // Nombre de usuario proporcionado por Render
+    password: 'a3HTYy4dqMAXTWL2CvZuEONtF70e3LTY', // Contraseña proporcionada por Render
+    database: 'comentarios_imagenes', // Nombre de la base de datos
+    port: 5432,
+    ssl: {
+        rejectUnauthorized: false // Esta opción es importante para conectar a Render
+    }
 });
 
-db.connect(err => {
-    if (err) throw err;
-    console.log('Conectado a la base de datos PostgreSQL');
-});
-
-module.exports = {
-    query: (text, params) => db.query(text, params),
-};
+module.exports = db;
